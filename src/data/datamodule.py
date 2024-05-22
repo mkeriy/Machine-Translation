@@ -1,7 +1,8 @@
 from torch.utils.data import DataLoader
 
 from src.data.mt_dataset import MTDataset
-from data.tokemizers.space_tokenizer import SpaceTokenizer
+from src.data.tokenizers.space_tokenizer import SpaceTokenizer
+from src.data.tokenizers.bpe_tokenizer import BPETokenizer
 from src.data.utils import TextUtils, short_text_filter_function
 
 
@@ -12,6 +13,11 @@ class DataManager:
         self.input_lang_n_words = None
         self.output_lang_n_words = None
         self.device = device
+        
+        if self.config["tokenizer"] == "space":
+            self.tokenizer = SpaceTokenizer
+        elif self.config["tokenizer"] == "bpe":
+            self.tokenizer = BPETokenizer
 
     def prepare_data(self):
         pairs = TextUtils.read_langs_pairs_from_file(filename=self.config["filename"])
@@ -44,8 +50,8 @@ class DataManager:
             target_sentences[train_size:],
         )
 
-        # TODO: Замените на BPE токенизатор
-        self.source_tokenizer = SpaceTokenizer(source_train_sentences, pad_flag=True)
+
+        self.source_tokenizer = self.tokenizer(source_train_sentences)
         tokenized_source_train_sentences = [
             self.source_tokenizer(s) for s in source_train_sentences
         ]
@@ -53,8 +59,8 @@ class DataManager:
             self.source_tokenizer(s) for s in source_val_sentences
         ]
 
-        # TODO: Замените на BPE токенизатор
-        self.target_tokenizer = SpaceTokenizer(target_train_sentences, pad_flag=True)
+        self.target_tokenizer = self.tokenizer(target_train_sentences)
+
         tokenized_target_train_sentences = [
             self.target_tokenizer(s) for s in target_train_sentences
         ]

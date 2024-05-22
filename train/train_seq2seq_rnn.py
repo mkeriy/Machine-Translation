@@ -1,9 +1,13 @@
-from models.rnn import seq2seq_rnn
+import sys
+import os
+sys.path.insert(1, os.getcwd())
+
+from src.models.rnn import Seq2SeqRNN
 import torch
 import yaml
-from . import trainer
-from data.datamodule import DataManager
-from txt_logger import TXTLogger
+from src.trainer import Trainer
+from src.data.datamodule import DataManager
+from src.txt_logger import TXTLogger
 
 if __name__ == "__main__":
     if torch.cuda.is_available():
@@ -17,7 +21,7 @@ if __name__ == "__main__":
 
     model_config = yaml.load(open("configs/model_config.yaml", 'r'),   Loader=yaml.Loader)
 
-    model = seq2seq_rnn.Seq2SeqRNN(
+    model = Seq2SeqRNN(
         encoder_vocab_size=len(dm.source_tokenizer.index2word),
         encoder_embedding_size=model_config['embedding_size'],
         decoder_embedding_size=model_config['embedding_size'],
@@ -30,7 +34,7 @@ if __name__ == "__main__":
     )
 
     logger = TXTLogger('training_logs')
-    trainer_cls = trainer.Trainer(model=model, model_config=model_config, logger=logger)
+    trainer_cls = Trainer(model=model, model_config=model_config, logger=logger)
 
     if model_config['try_one_batch']:
         train_dataloader = [list(train_dataloader)[0]]

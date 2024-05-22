@@ -1,5 +1,4 @@
 import re
-from typing import List, Tuple, Optional
 
 from tqdm import tqdm
 

@@ -1,6 +1,9 @@
 ---
-embedding_size: 100
-hidden_size: 100
+embedding_size: 256
+hidden_size: 256
+num_encoders: 3
+num_decoders: 3
+n_head: 8
 learning_rate: 0.001
 epoch_num: 5000
 try_one_batch: True

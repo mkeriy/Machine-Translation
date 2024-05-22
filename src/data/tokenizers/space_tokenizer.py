@@ -1,5 +1,5 @@
 class SpaceTokenizer:
-    def __init__(self, sentence_list, pad_flag):
+    def __init__(self, sentence_list, pad_flag=True):
         self.pad_flag = pad_flag
         self.word2index = {}
         self.word2count = {}

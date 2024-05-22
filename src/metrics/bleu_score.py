@@ -1,10 +1,10 @@
-from typing import Tuple, List
-
 import numpy as np
 from torchtext.data.metrics import bleu_score
 
 
-def bleu_scorer(predicted: np.ndarray, actual: np.ndarray, target_tokenizer):
+def bleu_scorer(
+    predicted: np.ndarray, actual: np.ndarray, target_tokenizer
+) -> tuple[float, list[str], list[str]]:
     """Convert predictions to sentences and calculate
     BLEU score.
 

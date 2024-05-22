@@ -1,7 +1,7 @@
 import torch
 
 import src.metrics.bleu_score as bleu_scorer
-from src.models.attention import Seq2seqAttention
+from src.models.utils.attention import Seq2seqAttention
 from .decoder import DecoderRNN
 from .encoder import EncoderRNN
 
@@ -108,7 +108,7 @@ class Seq2SeqRNN(torch.nn.Module):
         predicted = torch.stack(predicted_ids_list)
         predicted = predicted.squeeze().detach().cpu().numpy().swapaxes(0, 1)[:, 1:]
         actuals = target_tensor.squeeze().detach().cpu().numpy()[:, 1:]
-        bleu_score, actual_sentences, predicted_sentences = bleu_score.bleu_scorer(
+        bleu_score, actual_sentences, predicted_sentences = bleu_scorer(
             predicted=predicted, actual=actuals, target_tokenizer=self.target_tokenizer
         )
         return bleu_score, actual_sentences, predicted_sentences
